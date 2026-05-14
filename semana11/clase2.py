@@ -1,20 +1,18 @@
 #arreglos de datos 
 #arrays
 #ejemplo de un arreglo unidimensional
+import numpy as np
 
-productos = ["Laptop", "Smartphone", "Tablet", "Monitor", "Teclado"]
+array=np.array(["Laptop", "Smartphone", "Tablet", "Monitor", "Teclado"])
 
-print(f"El primer producto es: {productos[0]}")
-print(f"El ultimo producto es: {productos[-1]}")
+print(f"El primer producto es: {array[0]}")
+print(f"El ultimo producto es: {array[-1]}")
 
-productos[1] = "Smartwatch"
+array[1] = "Smartwatch"
 
-productos.append("Mouse")
-
-productos.pop(2)
-print("Productos actualizados:", productos)
-for i , producto in enumerate(productos):
+print("Productos actualizados:", array)
+for i , producto in enumerate(array):
     print(f"Producto {i + 1}: {producto}")
 
 
-print(f"\nCantidad de productos: {len(productos)}")
+print(f"\nCantidad de productos: {len(array)}")

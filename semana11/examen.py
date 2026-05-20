@@ -37,3 +37,13 @@ if __name__ == "__main__":
     print("\nFlujo Iterativo:")
     flujo_iterativo()
 
+#1.4 funcion de ordenamiento de la estructura
+def ordenar_datos():
+    lista = [5, 3, 1, 4, 2]
+    lista_ordenada = sorted(lista)
+    return lista_ordenada
+def flujo_ordenamiento():
+    datos_ordenados = ordenar_datos()
+    print("Datos ordenados:", datos_ordenados)
+print("\nFlujo de Ordenamiento:")
+flujo_ordenamiento()

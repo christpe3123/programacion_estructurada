@@ -9,11 +9,11 @@ def autenticar(usuario, contraseña):
 #increptimizar el token generado
 def tokenmisar(usuario):
     if usuario == "admin":
-        return "10:21:01"
+        return str(hash(usuario + "token"))
     else:
         return "00:00:00"
-    
-#funcion alertar 
+
+#funcion alertar
 def alertar(usuario):
     if usuario == "admin":
         return "Alerta: Acceso concedido"

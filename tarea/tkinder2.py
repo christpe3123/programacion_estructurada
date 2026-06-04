@@ -47,7 +47,7 @@ def mostrar_imagen(usuario):
     # Mensaje de éxito
     tk.Label(
         nueva_ventana,
-        text="A pero para pedir Plata, si son buenos",
+        text="A pero para pedir Plata, son buenos",
         font=("Arial", 16, "bold")
     ).pack(pady=10)
 

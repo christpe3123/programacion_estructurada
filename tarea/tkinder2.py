@@ -1,17 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-import login
-
-# =========================
-# DATOS
-# =========================
-# Usuario normal
-USUARIO =   "juan"
-PASSWORD = "1234"
-# Administrador
-ADMIN = "admin"
-ADMIN_PASSWORD = "root"
+from datetime import datetime  # <-- Importamos para capturar día y hora
+import login  # <-- Importamos tu archivo de lógica de login
 
 # =========================
 # VENTANA PRINCIPAL
@@ -23,10 +14,16 @@ ventana.title("Sistema Login")
 # =========================
 # MOSTRAR NUEVA VENTANA
 # =========================
-def mostrar_imagen():
+def mostrar_imagen(usuario):  
+    # Ocultamos la ventana de inicio de sesión
+    ventana.withdraw()
+
     nueva_ventana = tk.Toplevel(ventana)
     nueva_ventana.title("Bienvenido")
-    nueva_ventana.geometry("500x500")
+    nueva_ventana.geometry("500x650")  
+
+    # Al cerrar la ventana de bienvenida con la "X", cerramos todo el programa por completo
+    nueva_ventana.protocol("WM_DELETE_WINDOW", ventana.destroy)
 
     try:
         # Cargar imagen
@@ -47,11 +44,34 @@ def mostrar_imagen():
             fg="red"
         ).pack(pady=20)
 
+    # Mensaje de éxito
     tk.Label(
         nueva_ventana,
-        text="Iniciaste sesion fracasado",
-        font=("Arial", 16)
-    ).pack()
+        text="A pero para pedir Plata, si son buenos",
+        font=("Arial", 16, "bold")
+    ).pack(pady=10)
+
+    # --- OBTENER DATOS DE TIEMPO Y TOKEN ---
+    ahora = datetime.now()
+    dia_actual = ahora.strftime("%d/%m/%Y")
+    hora_actual = ahora.strftime("%H:%M:%S")
+    token_generado = login.tokenmisar(usuario)  
+
+    # --- CUADRO DE DETALLES DE SESIÓN ---
+    frame_info = tk.LabelFrame(
+        nueva_ventana, 
+        text=" Detalles de la Sesión ", 
+        font=("Arial", 10, "italic"), 
+        padx=15, 
+        pady=10
+    )
+    frame_info.pack(pady=10, fill="x", padx=40)
+
+    # Mostramos los datos solicitados
+    tk.Label(frame_info, text=f"📆 Día de ingreso: {dia_actual}", font=("Arial", 11)).pack(anchor="w", pady=2)
+    tk.Label(frame_info, text=f"⏰ Hora de ingreso: {hora_actual}", font=("Arial", 11)).pack(anchor="w", pady=2)
+    tk.Label(frame_info, text=f"🔑 Token: {token_generado}", font=("Arial", 11, "bold"), fg="darkblue").pack(anchor="w", pady=2)
+
 
 # =========================
 # LOGIN USUARIO
@@ -60,24 +80,34 @@ def login_usuario():
     usuario = entry_usuario.get()
     password = entry_password.get()
 
-    if usuario == USUARIO and password == PASSWORD:
-        messagebox.showinfo("Usuario", "Bienvenido usuario")
-        mostrar_imagen()
+    # Validamos usando la función del archivo login.py
+    resultado = login.autenticar(usuario, password)
+
+    if resultado == "usuario":
+        print(login.alertar(usuario))  
+        messagebox.showinfo("Usuario", login.redirigir(usuario))
+        mostrar_imagen(usuario)  
     else:
         messagebox.showerror("Error", "Usuario o contraseña incorrectos")
 
+
 # =========================
-# LOGIN ADMIN
+# LOGIN ADMINISTRADOR
 # =========================
 def login_admin():
     admin = entry_admin.get()
     admin_password = entry_admin_password.get()
 
-    if admin == ADMIN and admin_password == ADMIN_PASSWORD:
-        messagebox.showinfo("Administrador", "Bienvenido administrador")
-        mostrar_imagen()
+    # Validamos usando la función del archivo login.py
+    resultado = login.autenticar(admin, admin_password)
+
+    if resultado == "admin":
+        print(login.alertar(admin))  
+        messagebox.showinfo("Administrador", login.redirigir(admin))
+        mostrar_imagen(admin)  
     else:
         messagebox.showerror("Error", "Acceso administrador incorrecto")
+
 
 # =========================
 # FRAME LOGIN
@@ -88,13 +118,14 @@ frame_login.pack(pady=20)
 # =========================
 # LOGO
 # =========================
-logo_image = Image.open("tarea/imagenes/images.jpg")
-logo_image = logo_image.resize((150, 150))
-
-logo = ImageTk.PhotoImage(logo_image)
-
-logo_label = tk.Label(frame_login, image=logo)
-logo_label.pack(pady=10)
+try:
+    logo_image = Image.open("tarea/imagenes/images.jpg")
+    logo_image = logo_image.resize((150, 150))
+    logo = ImageTk.PhotoImage(logo_image)
+    logo_label = tk.Label(frame_login, image=logo)
+    logo_label.pack(pady=10)
+except Exception:
+    tk.Label(frame_login, text="[LOGO]", font=("Arial", 14)).pack(pady=10)
 
 # =========================
 # TITULO
@@ -106,7 +137,7 @@ tk.Label(
 ).pack(pady=20)
 
 # =========================
-# USUARIO
+# USUARIO NORMAL
 # =========================
 tk.Label(frame_login, text="Usuario").pack()
 

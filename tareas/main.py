@@ -1,5 +1,5 @@
 # Importamos la función desde el otro archivo
-from calculos import obtener_edad
+from tareas.calculos import obtener_edad
 
 # Pedimos el dato al usuario
 anio = int(input("¿En qué año naciste? "))

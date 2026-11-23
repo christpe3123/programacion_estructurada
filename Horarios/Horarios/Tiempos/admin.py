@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import Aula, BloqueHorario, Curso, Docente, Horario
 
-# Register your models here.
+admin.site.register([Aula, BloqueHorario, Curso, Docente, Horario])

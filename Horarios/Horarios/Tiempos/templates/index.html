@@ -1,11 +1,146 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matias esta falado </title> 
+    <title>Horario semanal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem 1rem;
+            background: #f3f6fb;
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1d4ed8;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgb(0 0 0 / 8%);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        caption {
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        th,
+        td {
+            border: 1px solid #dbe3ef;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        thead th {
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+        tbody th {
+            background: #eaf0ff;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        .schedule-entry {
+            margin: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            background: #eff6ff;
+            text-align: left;
+        }
+
+        .schedule-entry strong,
+        .schedule-entry span {
+            display: block;
+        }
+
+        .schedule-entry small {
+            display: block;
+            margin-top: 0.2rem;
+            color: #64748b;
+        }
+
+        .empty-state {
+            padding: 1.5rem;
+            color: #64748b;
+        }
+
+        .table-container table {
+            min-width: 850px;
+        }
+    </style>
 </head>
 <body>
-    "Bienvenido a la aplicación de horarios"
+    <main>
+        <h1>Horario semanal</h1>
+        <div class="table-container">
+            <table>
+                <caption>Registros guardados en la base de datos</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Hora</th>
+                        {% for codigo, nombre in dias %}
+                            <th scope="col">{{ nombre }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in filas %}
+                        <tr>
+                            <th scope="row">
+                                {{ fila.hora_inicio|time:"H:i" }}-{{ fila.hora_fin|time:"H:i" }}
+                            </th>
+                            {% for registros in fila.celdas %}
+                                <td>
+                                    {% for horario in registros %}
+                                        <div class="schedule-entry">
+                                            <strong>{{ horario.curso.nombre }}</strong>
+                                            <small>{{ horario.curso.codigo }}</small>
+                                            <span>{{ horario.docente }}</span>
+                                            <span>{{ horario.aula }}</span>
+                                        </div>
+                                    {% empty %}
+                                        &mdash;
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td class="empty-state" colspan="{{ colspan }}">
+                                Todavía no hay horarios registrados en la base de datos.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Swarm Rebuild: los cursores reconstruyen esta misma pagina al cargar. -->
+    <script src="{% static 'tiempos/swarm.js' %}"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from django.http import JsonResponse, request
 from django.shortcuts import render
 
 from .models import BloqueHorario, Horario
@@ -35,3 +36,8 @@ def Horarios_create(request):
         "index.html",
         {"dias": dias, "filas": filas, "colspan": len(dias) + 1},
     )
+    
+def datos_de_viaje_pruba(json_data):
+    print(json_data)
+    
+    return JsonResponse({"message": "Datos recibidos correctamente."})
